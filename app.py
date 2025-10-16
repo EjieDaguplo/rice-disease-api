@@ -6,15 +6,16 @@ from PIL import Image
 
 app = Flask(__name__)
 
-# --- Load your trained model ---
-# Make sure 'best.pt' is in the same folder as this file
+# --- Load your trained model (CPU only) ---
 model = YOLO("best.pt")
-model.fuse()    # Fuse model layers for better performance
+model.fuse()  # Fuse model layers for better performance
 
+# --- Home endpoint ---
 @app.route("/", methods=["GET"])
 def home():
     return jsonify({"message": "Rice Disease Detection API is running!"})
 
+# --- Predict endpoint ---
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
@@ -22,19 +23,24 @@ def predict():
             return jsonify({"error": "No image file provided"}), 400
 
         file = request.files['image']
+        if file.filename == "":
+            return jsonify({"error": "Empty filename"}), 400
 
-        # Save uploaded file properly
-        temp_dir = tempfile.gettempdir()
-        filename = file.filename
-        saved_path = os.path.join(temp_dir, filename)
+        # Save uploaded file to /tmp (Render writable folder)
+        temp_dir = "/tmp"
+        saved_path = os.path.join(temp_dir, file.filename)
         file.save(saved_path)
-        print("Received file:", filename)
-        print("Saved at:", saved_path)
+        print(f"Received file: {file.filename}, saved at {saved_path}")
 
-        # Run YOLO prediction
-        results = model(saved_path, device='cpu')  # Use 'cuda' if GPU is available
+        # --- Resize image to reduce memory usage ---
+        img = Image.open(saved_path)
+        img = img.resize((640, 640))  # YOLO default input size
+        img.save(saved_path)
 
-        # Clean up the saved file
+        # --- Run YOLO prediction (CPU, single thread to save memory) ---
+        results = model(saved_path, device='cpu', num_threads=1)
+
+        # Clean up temp file
         os.remove(saved_path)
 
         detections = results[0].boxes
@@ -45,7 +51,6 @@ def predict():
         label = results[0].names[int(top_detection.cls[0])]
         confidence = float(top_detection.conf[0])
 
-        #os.remove(saved_path)
         return jsonify({
             "disease_name": label,
             "confidence": round(confidence, 3)
@@ -54,8 +59,3 @@ def predict():
     except Exception as e:
         print("Error during prediction:", str(e))
         return jsonify({"error": str(e)}), 500
-
-
-#if __name__ == "__main__":
-    #port = int(os.environ.get("PORT", 10000))
-    #app.run(host="0.0.0.0", port=port)
