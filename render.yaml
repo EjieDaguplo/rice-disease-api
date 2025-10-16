@@ -6,5 +6,5 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: python app.py
     envVars:
-      - key: PORT
-        value: 10000
+      - key: PYTHON VERSION
+        value: 3.12.3
