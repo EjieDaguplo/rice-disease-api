@@ -34,11 +34,11 @@ def predict():
 
         # --- Resize image to reduce memory usage ---
         img = Image.open(saved_path)
-        img = img.resize((640, 640))  # YOLO default input size
+        img = img.resize((320, 320))  # YOLO default input size
         img.save(saved_path)
 
         # --- Run YOLO prediction (CPU, single thread to save memory) ---
-        results = model(saved_path, device='cpu',imgsz=640)
+        results = model(saved_path, device='cpu',imgsz=320)
 
         # Clean up temp file
         os.remove(saved_path)
