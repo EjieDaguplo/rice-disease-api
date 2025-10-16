@@ -38,7 +38,7 @@ def predict():
         img.save(saved_path)
 
         # --- Run YOLO prediction (CPU, single thread to save memory) ---
-        results = model(saved_path, device='cpu', num_threads=1)
+        results = model(saved_path, device='cpu',imgsz=640)
 
         # Clean up temp file
         os.remove(saved_path)
