@@ -6,4 +6,5 @@ torch==2.2.1+cpu
 torchvision==0.17.1+cpu
 torchaudio==2.2.1+cpu
 huggingface_hub==0.23.2
+matplotlib==3.9.2
 --extra-index-url https://download.pytorch.org/whl/cpu
