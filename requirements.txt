@@ -13,22 +13,26 @@
 # gunicorn==21.2.0
 # --extra-index-url https://download.pytorch.org/whl/cpu
 
-# Core Flask API
+# --- Web Server ---
 flask==3.0.3
 gunicorn==21.2.0
+
+# --- Core YOLOv12 Dependencies ---
 pillow==10.4.0
 numpy==1.26.4
 opencv-python==4.10.0.84
-
-# Torch CPU only (lighter)
 torch==2.2.1+cpu
 torchvision==0.17.1+cpu
 torchaudio==2.2.1+cpu
 
-# YOLOv12 (from sunsmarterjie)
+# --- Required by Ultralytics YOLOv12 ---
+huggingface_hub==0.23.2
+PyYAML==6.0.3
+requests==2.32.3
+psutil==5.9.8
+
+# --- YOLOv12 Source Repo (not PyPI ultralytics) ---
 git+https://github.com/sunsmarterjie/yolov12.git
 
-# Performance and essential tools
-psutil==5.9.8
+# --- Torch CPU wheels ---
 --extra-index-url https://download.pytorch.org/whl/cpu
-
