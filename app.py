@@ -4,8 +4,8 @@ import tempfile
 import os
 from PIL import Image
 
-os.environ["OMP_NUM_THREADS"] = "1"
-os.environ["MKL_NUM_THREADS"] = "1"
+# os.environ["OMP_NUM_THREADS"] = "1"
+# os.environ["MKL_NUM_THREADS"] = "1"
 
 app = Flask(__name__)
 
