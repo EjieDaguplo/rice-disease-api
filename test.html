@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rice Disease Detection Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: #f5f7fa;
+        padding: 40px;
+      }
+      h1 {
+        color: #2b7a78;
+      }
+      #preview {
+        margin-top: 20px;
+        max-width: 300px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      button {
+        background: #3aafa9;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 6px;
+      }
+      button:hover {
+        background: #2b7a78;
+      }
+      #result {
+        margin-top: 20px;
+        font-size: 18px;
+        color: #17252a;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🌾 Rice Disease Detection API Test</h1>
+    <p>Select a rice leaf image and test your deployed model!</p>
+
+    <input type="file" id="fileInput" accept="image/*" /><br /><br />
+    <img id="preview" src="#" alt="Preview" style="display: none" />
+    <br /><br />
+    <button id="uploadBtn">Detect Disease</button>
+
+    <div id="result"></div>
+
+    <script>
+      const apiUrl = "https://rice-disease-api-q4ms.onrender.com/predict";
+
+      const fileInput = document.getElementById("fileInput");
+      const preview = document.getElementById("preview");
+      const uploadBtn = document.getElementById("uploadBtn");
+      const result = document.getElementById("result");
+
+      // show image preview
+      fileInput.addEventListener("change", () => {
+        const file = fileInput.files[0];
+        if (file) {
+          preview.src = URL.createObjectURL(file);
+          preview.style.display = "block";
+        }
+      });
+
+      uploadBtn.addEventListener("click", async () => {
+        const file = fileInput.files[0];
+        if (!file) {
+          alert("Please select an image first!");
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        result.textContent = "⏳ Processing, please wait...";
+
+        try {
+          const response = await fetch(apiUrl, {
+            method: "POST",
+            body: formData,
+          });
+
+          const data = await response.json();
+          console.log(data);
+
+          if (data.disease_name) {
+            result.innerHTML = `✅ <b>Disease:</b> ${data.disease_name}<br>
+                              🧠 <b>Confidence:</b> ${(
+                                data.confidence * 100
+                              ).toFixed(2)}%`;
+          } else if (data.result) {
+            result.textContent = data.result;
+          } else {
+            result.textContent = "⚠️ Unexpected response.";
+          }
+        } catch (error) {
+          console.error(error);
+          result.textContent = "❌ Error connecting to the API.";
+        }
+      });
+    </script>
+  </body>
+</html>

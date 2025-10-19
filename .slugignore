@@ -1,0 +1,9 @@
+ultralytics/
+yolov12/
+__pycache__/
+*.zip
+*.tar
+*.pth
+*.ipynb_checkpoints
+*.whl
+*.tar.gz

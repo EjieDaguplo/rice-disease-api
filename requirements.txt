@@ -1,14 +1,22 @@
-setuptools==68.2.2
+# setuptools==68.2.2
+# flask==3.0.3
+# pillow==10.4.0
+# numpy==1.26.4
+# opencv-python==4.10.0.84
+# torch==2.2.1+cpu
+# torchvision==0.17.1+cpu
+# torchaudio==2.2.1+cpu
+# huggingface_hub==0.23.2
+# matplotlib==3.9.2
+# thop==0.1.1.post2209072238
+# psutil==5.9.8
+# gunicorn==21.2.0
+# --extra-index-url https://download.pytorch.org/whl/cpu
+
 flask==3.0.3
 pillow==10.4.0
-numpy==1.26.4
-opencv-python==4.10.0.84
 torch==2.2.1+cpu
 torchvision==0.17.1+cpu
-torchaudio==2.2.1+cpu
-huggingface_hub==0.23.2
-matplotlib==3.9.2
-thop==0.1.1.post2209072238
-psutil==5.9.8
 gunicorn==21.2.0
+git+https://github.com/sunsmarterjie/yolov12.git
 --extra-index-url https://download.pytorch.org/whl/cpu
